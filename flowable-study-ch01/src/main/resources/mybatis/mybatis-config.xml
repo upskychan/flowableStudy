@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--<properties>
+		<property name="prefix" value="" />
+		<property name="blobType" value="BLOB" />
+	</properties>-->
+
+	<!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+	<!--<plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        </plugin>
+    </plugins>-->
+
+	<mappers>
+		<!-- 对应Bean类的xml配置文件的路径信息
+		<mapper resource="META-INF/modeler-mybatis-mappings/Model.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ModelHistory.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ModelRelation.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ModelRelation.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/PcApiRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcIdentityInfo.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcIdentityTypeMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcTaskInfo.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/AppRegisiteMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/DivisionUnitApiRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ReceiptMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcNodeInfo.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcBackNodetInfo.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcMenuMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/MenuApiRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/EventApiRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcEventMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcComLangMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ConditionExpressMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ConditionFieldMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/RuleApiRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcRuleMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcCustomVariableMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcIdentityNew.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/IdentityRefRegisterMapper.xml" />
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcHiTaskMapper.xml"/>
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcElementMapper.xml"/>
+		<mapper resource="META-INF/modeler-mybatis-mappings/ProcReElementMapper.xml"/> -->
+	</mappers>
+
+</configuration>

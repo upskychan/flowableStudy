@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /flowableStudy
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 200
+    min-spare-threads: 30
+#mybatis:
+#  mapper-locations: classpath:mybatis/*.xml
+#  type-aliases-package: com.upsky.flowablestudy
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/flowablestudy?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
