@@ -28,6 +28,13 @@
         <property name="databaseSchemaUpdate" value="true"/>
     </bean>
 
+    <!--扩展SpringProcessEngineConfiguration类-->
+    <!--<bean id="processEngineConfiguration" class="com.upsky.flowablestudy.engine.JackySpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+    </bean>-->
+
     <bean id="processEngine" class="org.flowable.spring.ProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
