@@ -26,6 +26,15 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
+        <!--自动部署-->
+        <!--<property name="deploymentResources" value="classpath*:*.bpmn"></property>-->
+        <!--<property name="deploymentMode" value="single-resource"></property>-->
+        <!--<property name="deploymentMode" value="resource-parent-folder"></property>-->
+        <!--是否部署资源的时候生成流程图-->
+        <property name="createDiagramOnDeploy" value="true"></property>
+        <property name="activityFontName" value="宋体"></property>
+        <property name="labelFontName" value="宋体"></property>
+        <property name="annotationFontName" value="宋体"></property>
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->
