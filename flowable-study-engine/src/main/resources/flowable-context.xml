@@ -40,7 +40,7 @@
         <!--使用UUID作为ID生成器-->
         <!--<property name="idGenerator" ref="strongUuidGenerator"></property>-->
         <!--自定义的ID生成器-->
-        <property name="idGenerator" ref="jackyIdGenerator"></property>
+        <!--<property name="idGenerator" ref="jackyIdGenerator"></property>-->
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->
