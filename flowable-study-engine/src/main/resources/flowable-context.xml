@@ -41,6 +41,8 @@
         <!--<property name="idGenerator" ref="strongUuidGenerator"></property>-->
         <!--自定义的ID生成器-->
         <!--<property name="idGenerator" ref="jackyIdGenerator"></property>-->
+        <!--扩展流程实例帮助类-->
+        <property name="processInstanceHelper" ref="JackyProcessInstanceHelper"></property>
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->
@@ -54,6 +56,8 @@
     <bean id="strongUuidGenerator" class="org.flowable.common.engine.impl.persistence.StrongUuidGenerator"></bean>
     <!--自定义的ID生成器-->
     <bean id="jackyIdGenerator" class="com.upsky.flowablestudy.procdef.JackyIdGenerator"></bean>
+    <!--扩展流程实例帮助类-->
+    <bean id="JackyProcessInstanceHelper" class="com.upsky.flowablestudy.procinst.JackyProcessInstanceHelper"></bean>
 
     <bean id="processEngine" class="org.flowable.spring.ProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
