@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="receiveTask">
+  <process id="receivetask" name="接收任务测试" isExecutable="true">
+    <documentation>接收任务测试</documentation>
+    <startEvent id="startEvent1"></startEvent>
+    <receiveTask id="sid-43D1D00A-A9A6-4D4E-88CF-7CA2CCC359FD" name="获取当日销售额"></receiveTask>
+    <sequenceFlow id="sid-642EF126-92CA-4FF9-8BC3-B5C8B319C302" sourceRef="startEvent1" targetRef="sid-43D1D00A-A9A6-4D4E-88CF-7CA2CCC359FD"></sequenceFlow>
+    <receiveTask id="sid-88B3ACC4-E163-41F4-8B1B-31F4978ED9D8" name="给总经理发短信"></receiveTask>
+    <sequenceFlow id="sid-E12608C4-65CC-49B1-B3C8-5B0EE33EAAAA" sourceRef="sid-43D1D00A-A9A6-4D4E-88CF-7CA2CCC359FD" targetRef="sid-88B3ACC4-E163-41F4-8B1B-31F4978ED9D8"></sequenceFlow>
+    <endEvent id="sid-CF88376B-4F95-4E15-AAB1-16DE759A2130"></endEvent>
+    <sequenceFlow id="sid-F82552A1-B3C3-4838-8878-7DC80D192227" sourceRef="sid-88B3ACC4-E163-41F4-8B1B-31F4978ED9D8" targetRef="sid-CF88376B-4F95-4E15-AAB1-16DE759A2130"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_receivetask">
+    <bpmndi:BPMNPlane bpmnElement="receivetask" id="BPMNPlane_receivetask">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="145.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-43D1D00A-A9A6-4D4E-88CF-7CA2CCC359FD" id="BPMNShape_sid-43D1D00A-A9A6-4D4E-88CF-7CA2CCC359FD">
+        <omgdc:Bounds height="80.0" width="100.0" x="210.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-88B3ACC4-E163-41F4-8B1B-31F4978ED9D8" id="BPMNShape_sid-88B3ACC4-E163-41F4-8B1B-31F4978ED9D8">
+        <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-CF88376B-4F95-4E15-AAB1-16DE759A2130" id="BPMNShape_sid-CF88376B-4F95-4E15-AAB1-16DE759A2130">
+        <omgdc:Bounds height="28.0" width="28.0" x="505.0" y="146.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-642EF126-92CA-4FF9-8BC3-B5C8B319C302" id="BPMNEdge_sid-642EF126-92CA-4FF9-8BC3-B5C8B319C302">
+        <omgdi:waypoint x="129.94999913076796" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="209.99999999998067" y="160.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F82552A1-B3C3-4838-8878-7DC80D192227" id="BPMNEdge_sid-F82552A1-B3C3-4838-8878-7DC80D192227">
+        <omgdi:waypoint x="459.94999999999595" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="505.0" y="160.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-E12608C4-65CC-49B1-B3C8-5B0EE33EAAAA" id="BPMNEdge_sid-E12608C4-65CC-49B1-B3C8-5B0EE33EAAAA">
+        <omgdi:waypoint x="309.9499999999581" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="359.9999999999364" y="160.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

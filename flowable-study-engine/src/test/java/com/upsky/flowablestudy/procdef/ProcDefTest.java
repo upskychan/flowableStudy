@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
+/**
+ * 流程定义测试。
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:flowable-context.xml")
 public class ProcDefTest {
