@@ -5,11 +5,16 @@ import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.DeploymentBuilder;
 import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 节点。
@@ -90,5 +95,103 @@ public class NodeTest {
     public void trigger() {
         String executionId = "62502";//必须填写执行实例的ID，不能使用流程实例ID
         runtimeService.trigger(executionId);
+    }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance() {
+        String filePath = "个人任务测试.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-个人任务测试")
+//                .key("receivetask")
+                .addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "singletask";
+        String businessKey = "businessKey-singletask";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 查询指定人的待办任务。
+     * select distinct RES.* from ACT_RU_TASK RES WHERE RES.ASSIGNEE_ = ? order by RES.ID_ asc
+     */
+    @Test
+    public void findMyTask() {
+        String assignee = "张三丰";
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(assignee).list();
+        for (Task task : tasks) {
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getCreateTime());
+        }
+    }
+
+    /**
+     * 完成待办任务。
+     */
+    @Test
+    public void completeTask() {
+        String taskId = "70010";
+        taskService.complete(taskId);
+    }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance2() {
+        String filePath = "个人任务测试2.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-个人任务测试")
+//                .key("receivetask")
+                .addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "singletask";
+        String businessKey = "businessKey-singletask";
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("userId", "陈杰");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance3() {
+        String filePath = "个人任务测试3.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-个人任务测试")
+//                .key("receivetask")
+                .addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "singletask";
+        String businessKey = "businessKey-singletask";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 重新设置任务的办理人（认领任务）。
+     */
+    @Test
+    public void testSetAssignee() {
+        String assignee = "Jacky";
+        String taskId = "";
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(assignee).list();
+        for (Task task : tasks) {
+            taskId = task.getId();
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getAssignee());
+        }
+        String userId = "chenjie";
+        taskService.setAssignee(taskId, userId);
     }
 }
