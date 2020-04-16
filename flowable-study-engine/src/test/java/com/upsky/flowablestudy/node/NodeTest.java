@@ -5,6 +5,8 @@ import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.DeploymentBuilder;
 import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.identitylink.api.IdentityLink;
+import org.flowable.identitylink.api.history.HistoricIdentityLink;
 import org.flowable.task.api.Task;
 import org.junit.Before;
 import org.junit.Test;
@@ -193,5 +195,125 @@ public class NodeTest {
         }
         String userId = "chenjie";
         taskService.setAssignee(taskId, userId);
+    }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance4() {
+        String filePath = "组任务测试.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-组任务测试")
+                .addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "grouptask";
+        String businessKey = "businessKey-grouptask";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 查询多个候选人的个人任务（查不到，因为ASSIGNEE_ 为空）。
+     * select distinct RES.* from ACT_RU_TASK RES WHERE RES.ASSIGNEE_ = ? order by RES.ID_ asc
+     */
+    @Test
+    public void findMyTaskOfGroupTask() {
+        String assignee = "分享牛1";
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(assignee).list();
+        for (Task task : tasks) {
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getCreateTime());
+        }
+    }
+
+    /**
+     * 查询候选人任务（正确方式）。
+     * select distinct RES.* from ACT_RU_TASK RES WHERE RES.ASSIGNEE_ is null and exists(select LINK.ID_ from ACT_RU_IDENTITYLINK LINK where LINK.TYPE_ = 'candidate' and LINK.TASK_ID_ = RES.ID_ and ( LINK.USER_ID_ = ? ) ) order by RES.ID_ asc
+     */
+    @Test
+    public void findGroupTask() {
+        String userId = "分享牛1";
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(userId).list();
+        for (Task task : tasks) {
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getCreateTime());
+        }
+    }
+
+    /**
+     * 查询候选人任务的处理人。
+     * select * from ACT_RU_IDENTITYLINK where TASK_ID_ = ?
+     */
+    @Test
+    public void findGroupTaskUserList() {
+        String taskId="85010";
+        List<IdentityLink> identityLinksForTask = taskService.getIdentityLinksForTask(taskId);
+        for (IdentityLink identityLink : identityLinksForTask){
+            System.out.println("#####################");
+            System.out.println(identityLink.getProcessDefinitionId());
+            System.out.println(identityLink.getGroupId());
+            System.out.println(identityLink.getUserId());
+            System.out.println(identityLink.getTaskId());
+        }
+    }
+
+    /**
+     * 查询历史任务的处理人。
+     * select * from ACT_HI_IDENTITYLINK where TASK_ID_ = ?
+     */
+    @Test
+    public void findHiGroupTaskUserList() {
+        String taskId="85010";
+        List<HistoricIdentityLink> historicIdentityLinksForTask = historyService.getHistoricIdentityLinksForTask(taskId);
+        for (HistoricIdentityLink identityLink : historicIdentityLinksForTask){
+            System.out.println("#####################");
+            System.out.println(identityLink.getGroupId());
+            System.out.println(identityLink.getUserId());
+            System.out.println(identityLink.getTaskId());
+        }
+    }
+
+    /**
+     * 认领任务并完成任务。
+     */
+    @Test
+    public void claimGroupTask() {
+        String taskId="85010";
+        String userId="分享牛2";
+        taskService.claim(taskId,userId);
+
+        taskService.complete(taskId);
+    }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance5() {
+        String filePath = "组任务测试2.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-组任务测试2").addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "grouptask";
+        String businessKey = "businessKey-grouptask2";
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("userIds", "分享牛4,分享牛5,分享牛6");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 使用其他用户认领任务。
+     */
+    @Test
+    public void claimGroupTask2() {
+        String taskId = "95011";
+        String userId = "我不是分享牛";
+        taskService.claim(taskId, userId);
     }
 }
