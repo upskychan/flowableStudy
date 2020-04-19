@@ -316,4 +316,40 @@ public class NodeTest {
         String userId = "我不是分享牛";
         taskService.claim(taskId, userId);
     }
+
+    /**
+     * 部署并启动流程。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance6() {
+        String filePath = "组任务测试3.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-组任务测试3").addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "grouptask";
+        String businessKey = "businessKey-grouptask3";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 查询组任务并认领，完成任务
+     */
+    @Test
+    public void findGroupTaskAndClaimAndComplete() {
+        String userId = "陈杰7";
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(userId).list();
+        for (Task task : tasks) {
+            String taskId = task.getId();
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getCreateTime());
+            //认领任务
+            taskService.claim(taskId, userId);
+            //完成任务
+            taskService.complete(taskId);
+        }
+    }
+
 }
