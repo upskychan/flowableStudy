@@ -7,6 +7,10 @@ import org.flowable.engine.runtime.Execution;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.identitylink.api.IdentityLink;
 import org.flowable.identitylink.api.history.HistoricIdentityLink;
+import org.flowable.idm.api.Group;
+import org.flowable.idm.api.User;
+import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
+import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.flowable.task.api.Task;
 import org.junit.Before;
 import org.junit.Test;
@@ -349,6 +353,119 @@ public class NodeTest {
             taskService.claim(taskId, userId);
             //完成任务
             taskService.complete(taskId);
+        }
+    }
+
+    /**
+     * 分配个人任务回退到组任务（前提：之前是个组任务）
+     */
+    @Test
+    public void setAssigneeNull() {
+        String taskId = "95011";
+        taskService.setAssignee(taskId, null);
+    }
+
+    /**
+     * 组任务增加候选人
+     */
+    @Test
+    public void addCandidateUser() {
+        String taskId = "95011";
+        String userId = "Jacky10";
+        taskService.addCandidateUser(taskId, userId);
+    }
+
+    /**
+     * 组任务删除候选人
+     */
+    @Test
+    public void deleteCandidateUser() {
+        String taskId = "95011";
+        String userId = "Jacky10";
+        taskService.deleteCandidateUser(taskId, userId);
+    }
+
+    /**
+     * 部署并启动流程（角色任务）。
+     */
+    @Test
+    public void testDeploymentAndStartProcessInstance7() {
+        String filePath = "组任务测试4.bpmn20.xml";
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-组任务测试4").addClasspathResource(filePath);
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+
+        String processDefinitionKey = "grouptask";
+        String businessKey = "businessKey-grouptask4";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
+     * 初始化角色和用户
+     */
+    @Test
+    public void initGroupUsers() {
+        GroupEntityImpl groupEntity1 = new GroupEntityImpl();
+        groupEntity1.setRevision(0);
+        groupEntity1.setName("部门经理");
+        groupEntity1.setId("部门经理");
+
+        identityService.saveGroup(groupEntity1);//建立组
+        GroupEntityImpl groupEntity2 = new GroupEntityImpl();
+        groupEntity2.setRevision(0);
+        groupEntity2.setName("总经理");
+        groupEntity2.setId("总经理");
+        identityService.saveGroup(groupEntity2);//建立组
+
+        UserEntityImpl userEntity1 = new UserEntityImpl();
+        userEntity1.setRevision(0);
+        userEntity1.setId("张三");
+        identityService.saveUser(userEntity1);
+        UserEntityImpl userEntity2 = new UserEntityImpl();
+        userEntity2.setRevision(0);
+        userEntity2.setId("李四");
+        identityService.saveUser(userEntity2);
+        UserEntityImpl userEntity3 = new UserEntityImpl();
+        userEntity3.setRevision(0);
+        userEntity3.setId("王五");
+        identityService.saveUser(userEntity3);
+        identityService.createMembership("张三", "部门经理");//建立组和用户关系
+        identityService.createMembership("李四", "部门经理");//建立组和用户关系
+        identityService.createMembership("王五", "总经理");//建立组和用户关系
+    }
+
+    /**
+     * 角色任务查询某个用户的个人任务
+     */
+    @Test
+    public void findGroupTaskByUserId() {
+//        String userId = "王五";
+        String groupId = "总经理";
+        System.out.println(groupId + "角色下的用户：");
+        List<User> users = identityService.createUserQuery().memberOfGroup(groupId).list();
+        for (User user : users) {
+            String userId = user.getId();
+            System.out.println(userId);
+            List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(userId).list();
+            for (Task task : tasks) {
+                System.out.println(task.getId());
+                System.out.println(task.getName());
+                System.out.println(task.getCreateTime());
+            }
+        }
+    }
+
+    /**
+     * 直接按角色查询角色任务
+     */
+    @Test
+    public void taskCandidateGroup() {
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("总经理").list();
+        for (Task task : tasks) {
+            System.out.println(task.getId());
+            System.out.println(task.getName());
+            System.out.println(task.getCreateTime());
         }
     }
 
