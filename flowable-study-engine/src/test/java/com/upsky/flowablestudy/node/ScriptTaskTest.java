@@ -10,12 +10,15 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * 服务任务测试
+ * 脚本任务测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:flowable-context.xml")
-public class ServiceTaskTest {
+public class ScriptTaskTest {
     ProcessEngine processEngine;
     RepositoryService repositoryService;
     RuntimeService runtimeService;
@@ -51,9 +54,13 @@ public class ServiceTaskTest {
         System.out.println(taskService);
     }
 
+
     @Test
     public void deploy() {
-        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("服务任务").name("servicetask").addClasspathResource("服务任务节点3.bpmn20.xml");
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("脚本任务").name("scriptTask")
+                //.addClasspathResource("脚本任务测试.bpmn20.xml");
+                // .addClasspathResource("脚本任务测试2.bpmn20.xml");
+                .addClasspathResource("脚本任务测试3.bpmn20.xml");
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
     }
@@ -63,8 +70,13 @@ public class ServiceTaskTest {
      */
     @Test
     public void startProcessInstanceByKey() {
-        String processDefinitionKey = "serviceTask";
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey);
+        String processDefinitionKey = "scriptTask";
+        Map<String, Object> vars = new HashMap<String, Object>();
+        vars.put("a", 10);
+        vars.put("b", 5);
+        vars.put("echo", "分享牛");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, vars);
         System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
     }
 }
+
