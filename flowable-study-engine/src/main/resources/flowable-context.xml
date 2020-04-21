@@ -63,6 +63,8 @@
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 
+    <bean id="okReturningService" class="com.upsky.flowablestudy.node.OkReturningService"></bean>
+    <bean id="serviceTaskClass" class="com.upsky.flowablestudy.node.ServiceTaskClass"></bean>
     <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
     <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
     <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
