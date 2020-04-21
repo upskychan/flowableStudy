@@ -53,7 +53,7 @@ public class ServiceTaskTest {
 
     @Test
     public void deploy() {
-        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("服务任务").name("servicetask").addClasspathResource("服务任务节点3.bpmn20.xml");
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("服务任务").name("servicetask").addClasspathResource("bpmn_xml/服务任务节点3.bpmn20.xml");
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
     }

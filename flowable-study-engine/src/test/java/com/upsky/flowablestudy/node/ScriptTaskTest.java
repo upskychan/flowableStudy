@@ -54,13 +54,12 @@ public class ScriptTaskTest {
         System.out.println(taskService);
     }
 
-
     @Test
     public void deploy() {
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("脚本任务").name("scriptTask")
-                //.addClasspathResource("脚本任务测试.bpmn20.xml");
-                // .addClasspathResource("脚本任务测试2.bpmn20.xml");
-                .addClasspathResource("脚本任务测试3.bpmn20.xml");
+                //.addClasspathResource("bpmn_xml/脚本任务测试.bpmn20.xml");
+                // .addClasspathResource("bpmn_xml/脚本任务测试2.bpmn20.xml");
+                .addClasspathResource("bpmn_xml/脚本任务测试3.bpmn20.xml");
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
     }
