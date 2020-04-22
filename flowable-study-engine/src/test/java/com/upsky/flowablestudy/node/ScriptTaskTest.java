@@ -57,9 +57,9 @@ public class ScriptTaskTest {
     @Test
     public void deploy() {
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("脚本任务").name("scriptTask")
-                //.addClasspathResource("bpmn_xml/脚本任务测试.bpmn20.xml");
+                .addClasspathResource("bpmn_xml/脚本任务测试.bpmn20.xml");
                 // .addClasspathResource("bpmn_xml/脚本任务测试2.bpmn20.xml");
-                .addClasspathResource("bpmn_xml/脚本任务测试3.bpmn20.xml");
+//                .addClasspathResource("bpmn_xml/脚本任务测试3.bpmn20.xml");
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
     }
@@ -73,7 +73,7 @@ public class ScriptTaskTest {
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("a", 10);
         vars.put("b", 5);
-        vars.put("echo", "分享牛");
+        vars.put("echo", "陈杰");
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, vars);
         System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
     }
