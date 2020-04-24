@@ -28,7 +28,6 @@
                       targetRef="sid-A939E8C7-0943-4035-B2AB-15BA38E3220E">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${day>3}]]></conditionExpression>
         </sequenceFlow>
-
         <sequenceFlow id="sid-C1F03D4F-130F-4FB1-B81A-6D393BA1231A" sourceRef="sid-413E2532-6C9F-4C08-91CC-002D6883DEB5"
                       targetRef="sid-918F3ED6-4A83-4A87-977E-6D76FC6DCECE">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${day>1}]]></conditionExpression>
