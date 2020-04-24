@@ -66,6 +66,22 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.flowable/flowable-groovy-script-static-engine -->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-groovy-script-static-engine</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>3.0.3</version>
+            <type>pom</type>
+        </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -5,7 +5,7 @@
     <startEvent id="startEvent1"></startEvent>
     <scriptTask id="sid-05312B2A-20F7-4C02-B222-A0DC2C5446B4" name="脚本任务" scriptFormat="JavaScript" flowable:autoStoreVariables="false">
       <script><![CDATA[
-      com.shareniu.bpmn.ch9.ScriptTaskTestPoJo.foo();
+      com.upsky.flowablestudy.node.ScriptTaskTestPoJo.foo();
       ]]></script>
     </scriptTask>
     <endEvent id="sid-C3FD3A61-109C-4D58-90A1-A15A9C904EFE"></endEvent>

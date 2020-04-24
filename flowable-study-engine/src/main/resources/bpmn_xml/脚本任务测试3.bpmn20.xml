@@ -3,10 +3,8 @@
   <process id="scriptTask" name="脚本任务测试" isExecutable="true">
     <documentation>脚本任务测试</documentation>
     <startEvent id="startEvent1"></startEvent>
-    <scriptTask id="sid-05312B2A-20F7-4C02-B222-A0DC2C5446B4" name="脚本任务" scriptFormat="juel" flowable:autoStoreVariables="true" flowable:resultVariable="shareniu_">
-      <script><![CDATA[
-    #{echo}
-      ]]></script>
+    <scriptTask id="sid-05312B2A-20F7-4C02-B222-A0DC2C5446B4" name="脚本任务" scriptFormat="juel" flowable:autoStoreVariables="true" flowable:resultVariable="jacky_juel_rtn_var">
+      <script><![CDATA[#{echo}]]></script>
     </scriptTask>
     <endEvent id="sid-C3FD3A61-109C-4D58-90A1-A15A9C904EFE"></endEvent>
     <sequenceFlow id="sid-A8B4A876-709E-430C-A2DD-725653213C36" sourceRef="sid-05312B2A-20F7-4C02-B222-A0DC2C5446B4" targetRef="sid-C3FD3A61-109C-4D58-90A1-A15A9C904EFE"></sequenceFlow>
