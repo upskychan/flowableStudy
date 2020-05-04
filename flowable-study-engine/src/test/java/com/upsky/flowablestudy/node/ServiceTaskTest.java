@@ -16,13 +16,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:flowable-context.xml")
 public class ServiceTaskTest {
-    ProcessEngine processEngine;
-    RepositoryService repositoryService;
-    RuntimeService runtimeService;
-    TaskService taskService;
-    HistoryService historyService;
-    IdentityService identityService;
-    ManagementService managementService;
+    private ProcessEngine processEngine;
+    private RepositoryService repositoryService;
+    private RuntimeService runtimeService;
+    private TaskService taskService;
+    private HistoryService historyService;
+    private IdentityService identityService;
+    private ManagementService managementService;
 
     @Before
     public void buildProcessEngine() {

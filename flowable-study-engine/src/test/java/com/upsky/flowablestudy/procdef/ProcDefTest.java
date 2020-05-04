@@ -25,8 +25,8 @@ import java.util.zip.ZipInputStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:flowable-context.xml")
 public class ProcDefTest {
-    ProcessEngine processEngine;
-    RepositoryService repositoryService;
+    private ProcessEngine processEngine;
+    private RepositoryService repositoryService;
 
     @Before
     public void testSpringTypedProcessEngine() {
