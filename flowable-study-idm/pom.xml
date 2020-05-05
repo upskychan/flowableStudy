@@ -21,7 +21,7 @@
     </properties>
 
     <dependencies>
-        <!-- Logging -->
+        <!-- Logging:使用slf4j+log4j的方式 -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

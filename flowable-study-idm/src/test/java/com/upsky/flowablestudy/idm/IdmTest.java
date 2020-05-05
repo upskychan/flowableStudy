@@ -10,6 +10,8 @@ import org.flowable.idm.engine.impl.persistence.entity.GroupEntityImpl;
 import org.flowable.idm.engine.impl.persistence.entity.UserEntityImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.Map;
  * 人员组织测试类.
  */
 public class IdmTest {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     IdmEngine idmEngine;
     IdmEngineConfiguration idmEngineConfiguration;
     IdmIdentityService idmIdentityService;
@@ -88,8 +92,8 @@ public class IdmTest {
     @Test
     public void getTableMetaData() {
         TableMetaData tableMetaData = idmManagementService.getTableMetaData("ACT_ID_USER");
-        System.out.println(tableMetaData.getTableName() + ":");
-        System.out.println(tableMetaData.getColumnNames());
-        System.out.println(tableMetaData.getColumnTypes());
+        logger.info(tableMetaData.getTableName() + ":");
+        logger.info(tableMetaData.getColumnNames().toString());
+        logger.info(tableMetaData.getColumnTypes().toString());
     }
 }
