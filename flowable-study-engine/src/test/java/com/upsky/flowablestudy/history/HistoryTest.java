@@ -1,14 +1,19 @@
 package com.upsky.flowablestudy.history;
 
 import com.upsky.flowablestudy.variable.Person;
+import org.flowable.common.engine.api.history.HistoricData;
 import org.flowable.engine.*;
 import org.flowable.engine.history.HistoricActivityInstance;
 import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.history.ProcessInstanceHistoryLog;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.DeploymentBuilder;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.runtime.ProcessInstanceBuilder;
+import org.flowable.identitylink.api.history.HistoricIdentityLink;
 import org.flowable.task.api.Task;
+import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.task.service.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,10 +123,94 @@ public class HistoryTest {
                     lastProcInstId = procInstId;
                     logger.info("****************流程实例{}**************", hisActInst.getProcessInstanceId());
                 }
-                logger.info("活动节点ID：{}", hisActInst.getActivityId());
-                logger.info("活动节点名称：{}", hisActInst.getActivityName());
-                logger.info("活动节点类型：{}", hisActInst.getActivityType());
-                logger.info("操作人：{}", hisActInst.getAssignee());
+                logger.info("活动节点ID：{}-名称：{}-类型：{}-操作人：{}", hisActInst.getActivityId(), hisActInst.getActivityName(), hisActInst.getActivityType(), hisActInst.getAssignee());
+            }
+        }
+    }
+
+    /**
+     * 查询某流程实例一共经历了多少个任务
+     * SQL:select distinct RES.* from ACT_HI_TASKINST RES WHERE RES.PROC_INST_ID_ = ? order by RES.START_TIME_ asc
+     */
+    @Test
+    public void testHistoricTaskInstanceQuery() {
+        String procInstId = "35001";
+        List<HistoricTaskInstance> hisTaskList = historyService.createHistoricTaskInstanceQuery().processInstanceId(procInstId).orderByHistoricTaskInstanceStartTime().asc().list();
+        if (hisTaskList != null) {
+            for (HistoricTaskInstance hisTask : hisTaskList) {
+                logger.info("{}-{}-{}-{}ms", hisTask.getId(), hisTask.getName(), hisTask.getAssignee(), hisTask.getDurationInMillis());
+            }
+        }
+    }
+
+    /**
+     * 查询历史变量表
+     * SQL:select RES.* from ACT_HI_VARINST RES WHERE RES.PROC_INST_ID_ = ? order by RES.ID_ asc
+     */
+    @Test
+    public void testHistoricVariableInstanceQuery() {
+        String procInstId = "135001";
+        List<HistoricVariableInstance> hisVarInstList = historyService.createHistoricVariableInstanceQuery().processInstanceId(procInstId).list();
+        if (hisVarInstList != null) {
+            for (HistoricVariableInstance hisVar : hisVarInstList) {
+                logger.info("{}-{}-{}", hisVar.getVariableName(), hisVar.getVariableTypeName(), hisVar.getValue());
+            }
+        }
+    }
+
+    /**
+     * 痕迹日志查询
+     * select * from ACT_HI_PROCINST where PROC_INST_ID_ = ?
+     */
+    @Test
+    public void testHistoryLogQuery() {
+        String processInstanceId="135001";
+        ProcessInstanceHistoryLog processInstanceHistoryLog = historyService
+                .createProcessInstanceHistoryLogQuery(processInstanceId)
+                .includeTasks()
+                .includeActivities()
+                .singleResult();
+        List<HistoricData> historicData = processInstanceHistoryLog.getHistoricData();
+        for (HistoricData hisData :historicData){
+            if (hisData instanceof HistoricTaskInstanceEntity ){
+                HistoricTaskInstanceEntity historicTaskInstanceEntity= (HistoricTaskInstanceEntity) hisData;
+                logger.info("任务-{}:{}",historicTaskInstanceEntity.getName(),historicTaskInstanceEntity.getAssignee());
+            }
+            if (hisData instanceof  HistoricActivityInstance){
+                HistoricActivityInstance hai= (HistoricActivityInstance) hisData;
+                logger.info("活动节点{}:{}",hai.getActivityId(),hai.getActivityName());
+            }
+        }
+        logger.info("{}-{}-{}",processInstanceHistoryLog.getId(),processInstanceHistoryLog.getBusinessKey(),processInstanceHistoryLog.getEndTime());
+    }
+
+    /**
+     * 历史权限-任务
+     * select * from ACT_HI_TASKINST where ID_ = ?
+     * select * from ACT_HI_IDENTITYLINK where TASK_ID_ = ?
+     */
+    @Test
+    public void getHistoricIdentityLinksForTask() {
+        String taskId = "40003";
+        List<HistoricIdentityLink> hisIdentityLinks = historyService.getHistoricIdentityLinksForTask(taskId);
+        if (hisIdentityLinks != null) {
+            for (HistoricIdentityLink hisIdentityLink : hisIdentityLinks) {
+                logger.info(hisIdentityLink.getUserId());
+            }
+        }
+    }
+
+    /**
+     * 历史权限-流程实例
+     * select * from ACT_HI_IDENTITYLINK where PROC_INST_ID_ = ?
+     */
+    @Test
+    public void getHistoricIdentityLinksForProcessInstance() {
+        String procInstId = "35001";
+        List<HistoricIdentityLink> hisIdentityLinks = historyService.getHistoricIdentityLinksForProcessInstance(procInstId);
+        if (hisIdentityLinks != null) {
+            for (HistoricIdentityLink hisIdentityLink : hisIdentityLinks) {
+                logger.info(hisIdentityLink.getUserId());
             }
         }
     }
