@@ -43,6 +43,11 @@
         <!--<property name="idGenerator" ref="jackyIdGenerator"></property>-->
         <!--扩展流程实例帮助类-->
         <property name="processInstanceHelper" ref="JackyProcessInstanceHelper"></property>
+        <!--历史数据级别控制-->
+        <!--<property name="historyLevel" value="AUDIT"></property>-->
+        <!--历史数据异步方式入库-->
+        <!--<property name="asyncHistoryEnabled" value="true"></property>-->
+        <!--<property name="asyncHistoryExecutorActivate" value="true"></property>-->
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->

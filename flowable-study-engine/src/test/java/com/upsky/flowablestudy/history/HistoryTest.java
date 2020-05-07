@@ -215,5 +215,34 @@ public class HistoryTest {
         }
     }
 
+    /**
+     * 本地SQL方式查询历史流程活动
+     */
+    @Test
+    public void testNativeHistoricActivityInstanceQuery() {
+        String sql = "select RES.* from ACT_HI_ACTINST RES WHERE RES.END_TIME_ is not null and RES.ACT_TYPE_ !='sequenceFlow' order by RES.ID_ asc";
+        List<HistoricActivityInstance> hisActInstList = historyService.createNativeHistoricActivityInstanceQuery().sql(sql).list();
+        if (hisActInstList != null) {
+            String lastProcInstId = null;
+            for (HistoricActivityInstance hisActInst : hisActInstList) {
+                String procInstId = hisActInst.getProcessInstanceId();
+                if (!procInstId.equals(lastProcInstId)) {
+                    lastProcInstId = procInstId;
+                    logger.info("****************流程实例{}**************", hisActInst.getProcessInstanceId());
+                }
+                logger.info("活动节点ID：{}-名称：{}-类型：{}-操作人：{}", hisActInst.getActivityId(), hisActInst.getActivityName(), hisActInst.getActivityType(), hisActInst.getAssignee());
+            }
+        }
+    }
+
+    @Test
+    public void sleep() {
+        try {
+            Thread.sleep(5000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
