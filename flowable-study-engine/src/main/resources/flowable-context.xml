@@ -48,6 +48,8 @@
         <!--历史数据异步方式入库-->
         <!--<property name="asyncHistoryEnabled" value="true"></property>-->
         <!--<property name="asyncHistoryExecutorActivate" value="true"></property>-->
+        <!--定时任务执行器开关-->
+        <!--<property name="asyncExecutorActivate" value="true"></property>-->
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->
