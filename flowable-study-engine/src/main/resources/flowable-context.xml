@@ -50,6 +50,11 @@
         <!--<property name="asyncHistoryExecutorActivate" value="true"></property>-->
         <!--定时任务执行器开关-->
         <!--<property name="asyncExecutorActivate" value="true"></property>-->
+        <!--自定义的流程图生成器-->
+        <property name="processDiagramGenerator">
+            <bean class="com.upsky.flowablestudy.diagram.MyDefaultProcessDiagramGenerator"></bean>
+        </property>
+        <property name="drawSequenceFlowNameWithNoLabelDI" value="true"></property>
     </bean>
 
     <!--扩展SpringProcessEngineConfiguration类-->
