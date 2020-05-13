@@ -1,5 +1,9 @@
 package com.upsky.flowablestudy.form;
 
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.Process;
+import org.flowable.bpmn.model.StartEvent;
+import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.*;
 import org.flowable.engine.form.FormProperty;
 import org.flowable.engine.form.FormType;
@@ -26,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 动态表单测试
+ * 表单测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:flowable-context.xml")
@@ -205,15 +209,154 @@ public class FormTest {
     }
 
     /**
-     * 启动流程实例
+     * 外置表单部署
      */
     @Test
-    public void startProcessInstanceByKey() {
-        String processDefinitionKey = "form";
-        String businessKey = "bKey-form";
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
-        logger.info(processInstance.getId() + "," + processInstance.getActivityId());
+    public void deploy2() {
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
+        deploymentBuilder = deploymentBuilder.category("表单相关的测试").name("外置表单").key("dKey-renderform");
+        deploymentBuilder = deploymentBuilder.addClasspathResource("bpmn_xml/formkey2.bpmn20.xml").addClasspathResource("start.html").addClasspathResource("task.html").addClasspathResource("task2.html");
+        Deployment deployment = deploymentBuilder.deploy();
+        logger.info("deloyId:{}", deployment.getId());
     }
 
+    /**
+     * 获取开始节点的外置表单key
+     */
+    @Test
+    public void getStartFormKey() {
+        String procDefId = "formkey2:1:200007";
+        String startFormKey = formService.getStartFormKey(procDefId);
+        logger.info("开始节点定义的表单key:{}", startFormKey);
+    }
+
+    /**
+     * 获取开始节点的外置表单
+     */
+    @Test
+    public void getRenderedStartForm() {
+        String procDefId = "formkey2:1:200007";
+        //方法一
+        Object renderedStartForm = formService.getRenderedStartForm(procDefId);
+        logger.info("开始节点定义的外置表单资源:{}" + renderedStartForm);
+        //方法二
+        Object renderedStartForm2 = formService.getRenderedStartForm(procDefId, null);
+        logger.info("开始节点定义的外置表单资源2:{}" + renderedStartForm2);
+        //方法三
+        Object renderedStartForm3 = formService.getRenderedStartForm(procDefId, "juel");
+        logger.info("开始节点定义的外置表单资源3:{}" + renderedStartForm3);
+    }
+
+    /**
+     * 格式化日期
+     *
+     * @param date date
+     * @return 日期
+     */
+    private String getDate2(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
+    }
+
+    /**
+     * 提交表单并启动流程实例
+     */
+    @Test
+    public void submitStartFormData2() {
+        String procDefId = "formkey2:1:200007";
+        Map<String, String> vars = new HashMap<String, String>();
+        Date now = new Date();
+        vars.put("startDate", getDate2(now));
+        vars.put("endDate", getDate2(new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000L)));
+        vars.put("reason", "我想出去玩玩");
+        ProcessInstance processInstance = formService.submitStartFormData(procDefId, vars);
+        logger.info("流程实例ID:{}", processInstance.getProcessInstanceId());
+    }
+
+    /**
+     * 获取任务节点外置表单并渲染
+     */
+    @Test
+    public void getRenderedTaskForm() {
+        String taskId = "205006";
+        //方法一
+        Object renderedTaskForm = formService.getRenderedTaskForm(taskId);
+        logger.info("renderedTaskForm1:{}", renderedTaskForm);
+        //方法二
+        Object renderedTaskForm2 = formService.getRenderedTaskForm(taskId, null);
+        logger.info("renderedTaskForm2:{}", renderedTaskForm2);
+        //方法三
+        Object renderedTaskForm3 = formService.getRenderedTaskForm(taskId, "juel");
+        logger.info("renderedTaskForm3:{}", renderedTaskForm3);
+    }
+
+    /**
+     * 提交任务表单并完成任务
+     */
+    @Test
+    public void submitTaskFormData2() {
+        String taskId = "202512";
+        Map<String, String> vars = new HashMap<String, String>();
+        Date now = new Date();
+        vars.put("startDate", getDate2(now));
+        vars.put("endDate", getDate2(new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000L)));
+        vars.put("reason", "我又想出去玩玩");
+        formService.submitTaskFormData(taskId, vars);
+    }
+
+    /**
+     * 获取运行任务的外置表单key
+     */
+    @Test
+    public void getTaskFormData2() {
+        String taskId = "205006";
+        TaskFormData taskFormData = formService.getTaskFormData(taskId);
+        String formKey = taskFormData.getFormKey();
+        logger.info("formKey:{}", formKey);
+    }
+
+    /**
+     * 获取任意节点（运行和非运行任务）的外置表单key
+     */
+    @Test
+    public void getFormKey() {
+        String procDefId = "formkey2:1:200007";
+        String startFormKey = formService.getStartFormKey(procDefId);
+        logger.info("startFormKey:{}", startFormKey);
+        String nodeId = "sid-4CD86265-1E97-4CC7-99BD-689F65C4C297";
+        String taskFormKey = formService.getTaskFormKey(procDefId, nodeId);
+        logger.info("taskFormKey:{}", taskFormKey);
+    }
+
+    /**
+     * 自定义工具类获取开始节点外置表单key
+     */
+    @Test
+    public void getStartEventFormKey() {
+        String procDefId = "formkey2:1:200007";
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
+        Process mainProcess = bpmnModel.getMainProcess();
+        List<StartEvent> flowElementsOfType = mainProcess.findFlowElementsOfType(StartEvent.class);
+        for (StartEvent startEvent : flowElementsOfType) {
+            String formKey = startEvent.getFormKey();
+            logger.info("开始节点的ID：" + startEvent.getId() + ",formkey:" + formKey);
+        }
+    }
+
+    /**
+     * 自定义工具类获取任务节点外置表单key
+     */
+    @Test
+    public void getUserTaskFormKey() {
+        String procDefId = "formkey2:1:200007";
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
+        Process mainProcess = bpmnModel.getMainProcess();
+        List<UserTask> flowElementsOfType = mainProcess.findFlowElementsOfType(UserTask.class);
+        for (UserTask userTask : flowElementsOfType) {
+            String formKey = userTask.getFormKey();
+            logger.info("任务的ID：" + userTask.getId() + ",formkey:" + formKey);
+        }
+    }
 }
 
