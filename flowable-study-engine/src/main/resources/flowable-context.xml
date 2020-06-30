@@ -77,6 +77,10 @@
 
     <bean id="okReturningService" class="com.upsky.flowablestudy.node.OkReturningService"></bean>
     <bean id="serviceTaskClass" class="com.upsky.flowablestudy.node.ServiceTaskClass"></bean>
+    <!--监听器-->
+    <bean id="myExecutionListener" class="com.upsky.flowablestudy.node.MyExecutionListener"></bean>
+    <bean id="myTaskListener" class="com.upsky.flowablestudy.node.MyTaskListener"></bean>
+
     <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
     <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
     <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
