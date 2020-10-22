@@ -298,13 +298,13 @@ public class NodeTest {
      */
     @Test
     public void testDeploymentAndStartProcessInstance5() {
-        String filePath = "组任务测试2.bpmn20.xml";
+        String filePath = "bpmn_xml/组任务测试2.bpmn20.xml";
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("流程实例学习分类").name("部署名称-组任务测试2").addClasspathResource(filePath);
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
 
         String processDefinitionKey = "grouptask";
-        String businessKey = "businessKey-grouptask2";
+        String businessKey = "businessKey-grouptask2-2";
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("userIds", "分享牛4,分享牛5,分享牛6");
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);
@@ -316,8 +316,9 @@ public class NodeTest {
      */
     @Test
     public void claimGroupTask2() {
-        String taskId = "95011";
-        String userId = "我不是分享牛";
+        String taskId = "232511";
+        String userId = "分享牛5-1";
+//        taskService.claim(taskId, null);
         taskService.claim(taskId, userId);
     }
 
