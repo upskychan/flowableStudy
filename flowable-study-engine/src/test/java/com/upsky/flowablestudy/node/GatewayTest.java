@@ -131,5 +131,48 @@ public class GatewayTest {
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,vars);
         System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
     }
+
+    /**
+     * 网关_不配条件。
+     */
+    @Test
+    public void deployNoCondition() {
+//        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_excluside")
+//                .addClasspathResource("bpmn_xml/网关_不配条件_互斥.bpmn20.xml");
+        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_inclusive")
+                .addClasspathResource("bpmn_xml/网关_不配条件_包容.bpmn20.xml");
+        Deployment deploy = deploymentBuilder.deploy();
+        System.out.println(deploy.getId());
+    }
+
+    /**
+     * 启动流程实例（网关_不配条件_互斥）。
+     * 结论：
+     *   1、互斥网关的分支中如果存在满足条件的分支，则走该分支；
+     *   2、如果不存在配了条件且满足的分支，默认走未配条件的分支；
+     *   3、从第一条分支开始遍历，计算成功的出线之前的条件变量必须传，之后的条件变量可以不传。
+     */
+    @Test
+    public void startProcessInstanceByKeyNoCondition1() {
+        String processDefinitionKey = "gateway_nocondition_excluside";
+        String businessKey = "gateway_nocondition_excluside_2";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey);
+        System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
+    }
+
+    /**
+     * 启动流程实例（网关_不配条件_包容）。
+     * 结论：
+     *   1、包容网关的分支中如果存在满足条件的分支，则走该分支；
+     *   2、并且未配置条件的分支也会走；
+     *   3、所有分支上的条件变量都必须传（并行网关的分支条件变量不用传）。
+     */
+    @Test
+    public void startProcessInstanceByKeyNoCondition2() {
+        String processDefinitionKey = "gateway_nocondition_inclusive";
+        String businessKey = "gateway_nocondition_inclusive_1";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey);
+        System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
+    }
 }
 
