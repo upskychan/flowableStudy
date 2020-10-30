@@ -139,8 +139,15 @@ public class GatewayTest {
     public void deployNoCondition() {
 //        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_excluside")
 //                .addClasspathResource("bpmn_xml/网关_不配条件_互斥.bpmn20.xml");
+//        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_inclusive")
+//                .addClasspathResource("bpmn_xml/网关_不配条件_包容.bpmn20.xml");
+        //互斥网关后的出线上配置默认出线，默认出线上不允许配置条件（Default sequenceflow has a condition, which is not allowed）
+        //当没有符合条件的其它分支时，才会走默认出线
+//        DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_excluside")
+//                .addClasspathResource("bpmn_xml/网关_默认出线_互斥.bpmn20.xml");
+        //包容网关后的出线上配置默认出线，默认出线上可以配置条件，但会被忽视掉（即不管是否满足条件，只有当没有符合条件的其它分支时，才会走默认出线）
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().category("网关测试").name("gateway_nocondition_inclusive")
-                .addClasspathResource("bpmn_xml/网关_不配条件_包容.bpmn20.xml");
+                .addClasspathResource("bpmn_xml/网关_默认出线_包容.bpmn20.xml");
         Deployment deploy = deploymentBuilder.deploy();
         System.out.println(deploy.getId());
     }
@@ -148,14 +155,17 @@ public class GatewayTest {
     /**
      * 启动流程实例（网关_不配条件_互斥）。
      * 结论：
-     *   1、互斥网关的分支中如果存在满足条件的分支，则走该分支；
-     *   2、如果不存在配了条件且满足的分支，默认走未配条件的分支；
+     *   1、互斥网关的分支中如果存在满足条件的分支，则走该分支。
+     *   2、如果不存在配了条件且满足的分支，默认走未配条件的分支。
      *   3、从第一条分支开始遍历，计算成功的出线之前的条件变量必须传，之后的条件变量可以不传。
+     *   4、设置默认流的情况：
+     *   4.1、互斥网关后的出线上配置默认出线，默认出线上不允许配置条件（Default sequenceflow has a condition, which is not allowed）。
+     *   4.2当没有符合条件的其它分支时，才会走默认出线。
      */
     @Test
     public void startProcessInstanceByKeyNoCondition1() {
         String processDefinitionKey = "gateway_nocondition_excluside";
-        String businessKey = "gateway_nocondition_excluside_2";
+        String businessKey = "gateway_nocondition_excluside_5";
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey);
         System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
     }
@@ -163,14 +173,15 @@ public class GatewayTest {
     /**
      * 启动流程实例（网关_不配条件_包容）。
      * 结论：
-     *   1、包容网关的分支中如果存在满足条件的分支，则走该分支；
-     *   2、并且未配置条件的分支也会走；
+     *   1、包容网关的分支中如果存在满足条件的分支，则走该分支。
+     *   2、并且未配置条件的分支也会走。
      *   3、所有分支上的条件变量都必须传（并行网关的分支条件变量不用传）。
+     *   4、包容网关后的出线上配置默认流，默认出线上可以配置条件，但会被忽视掉（即不管是否满足条件，只有当没有符合条件的其它分支时，才会走默认出线）。
      */
     @Test
     public void startProcessInstanceByKeyNoCondition2() {
         String processDefinitionKey = "gateway_nocondition_inclusive";
-        String businessKey = "gateway_nocondition_inclusive_1";
+        String businessKey = "gateway_nocondition_inclusive_4";
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey);
         System.out.println(processInstance.getId() + "," + processInstance.getActivityId());
     }
