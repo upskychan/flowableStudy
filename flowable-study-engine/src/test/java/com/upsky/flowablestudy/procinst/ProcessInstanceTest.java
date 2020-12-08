@@ -431,12 +431,34 @@ public class ProcessInstanceTest {
     }
 
     /**
+     * 启动流程实例。
+     */
+    @Test
+    public void startProcessInstanceByKey2() {
+        String processDefinitionKey = "singletask";
+        String businessKey = "businessKey-singletask-2";
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey);
+        System.out.println(processInstance.getId());
+    }
+
+    /**
      * 挂起流程实例。
+     * 流程实例被挂起后，该流程实例下的所有执行实例都会被挂起。
      */
     @Test
     public void suspendProcessInstanceByProcInstId() {
-        String processInstanceId = "57501";
+        String processInstanceId = "290001";
         runtimeService.suspendProcessInstanceById(processInstanceId);
+    }
+
+    /**
+     * 挂起流程实例后，强制送审待办任务。
+     * 流程实例被挂起后，该实例对应的所有任务不能审核，强制审核任务会报错。
+     */
+    @Test
+    public void completeAfterSuspend(){
+        String taskId = "290006";
+        taskService.complete(taskId);
     }
 
     /**
